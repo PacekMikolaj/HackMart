@@ -1,0 +1,123 @@
+[
+  {
+    "id": "mass-assignment",
+    "titleKey": "vuln.mass-assignment.title",
+    "descriptionKey": "vuln.mass-assignment.description",
+    "taskKey": "vuln.mass-assignment.task",
+    "link": "https://cheatsheetseries.owasp.org/cheatsheets/Mass_Assignment_Cheat_Sheet.html",
+    "hintsKeys": [
+      "vuln.mass-assignment.hint0",
+      "vuln.mass-assignment.hint1",
+      "vuln.mass-assignment.hint2"
+    ]
+  },
+  {
+    "id": "token-forgery",
+    "titleKey": "vuln.token-forgery.title",
+    "descriptionKey": "vuln.token-forgery.description",
+    "taskKey": "vuln.token-forgery.task",
+    "link": "https://owasp.org/Top10/A01_2021-Broken_Access_Control/",
+    "hintsKeys": [
+      "vuln.token-forgery.hint0",
+      "vuln.token-forgery.hint1",
+      "vuln.token-forgery.hint2",
+      "vuln.token-forgery.hint3",
+      "vuln.token-forgery.hint4"
+    ]
+  },
+  {
+    "id": "weak-password-requirements",
+    "titleKey": "vuln.weak-password-requirements.title",
+    "descriptionKey": "vuln.weak-password-requirements.description",
+    "taskKey": "vuln.weak-password-requirements.task",
+    "link": "https://cwe.mitre.org/data/definitions/521.html",
+    "hintsKeys": [
+      "vuln.weak-password-requirements.hint0",
+      "vuln.weak-password-requirements.hint1",
+      "vuln.weak-password-requirements.hint2",
+      "vuln.weak-password-requirements.hint3"
+    ]
+  },
+  {
+    "id": "cors-misconfig",
+    "titleKey": "vuln.cors-misconfig.title",
+    "descriptionKey": "vuln.cors-misconfig.description",
+    "taskKey": "vuln.cors-misconfig.task",
+    "link": "https://owasp.org/www-community/attacks/CORS_OriginHeaderScrutiny",
+    "hintsKeys": [
+      "vuln.cors-misconfig.hint0",
+      "vuln.cors-misconfig.hint1",
+      "vuln.cors-misconfig.hint2"
+    ]
+  },
+  {
+    "id": "missing-rate-limiting",
+    "titleKey": "vuln.missing-rate-limiting.title",
+    "descriptionKey": "vuln.missing-rate-limiting.description",
+    "taskKey": "vuln.missing-rate-limiting.task",
+    "link": "https://cwe.mitre.org/data/definitions/770.html",
+    "hintsKeys": [
+      "vuln.missing-rate-limiting.hint0",
+      "vuln.missing-rate-limiting.hint1",
+      "vuln.missing-rate-limiting.hint2"
+    ]
+  },
+  {
+    "id": "xss",
+    "titleKey": "vuln.xss.title",
+    "descriptionKey": "vuln.xss.description",
+    "taskKey": "vuln.xss.task",
+    "link": "https://owasp.org/www-community/attacks/xss/",
+    "hintsKeys": ["vuln.xss.hint0", "vuln.xss.hint1"]
+  },
+  {
+    "id": "idor",
+    "titleKey": "vuln.idor.title",
+    "descriptionKey": "vuln.idor.description",
+    "taskKey": "vuln.idor.task",
+    "link": "https://cheatsheetseries.owasp.org/cheatsheets/Insecure_Direct_Object_Reference_Prevention_Cheat_Sheet.html",
+    "hintsKeys": ["vuln.idor.hint0", "vuln.idor.hint1", "vuln.idor.hint2"]
+  },
+  {
+    "id": "improper-input-validation",
+    "titleKey": "vuln.improper-input-validation.title",
+    "descriptionKey": "vuln.improper-input-validation.description",
+    "taskKey": "vuln.improper-input-validation.task",
+    "link": "https://cwe.mitre.org/data/definitions/20.html",
+    "hintsKeys": [
+      "vuln.improper-input-validation.hint0",
+      "vuln.improper-input-validation.hint1",
+      "vuln.improper-input-validation.hint2",
+      "vuln.improper-input-validation.hint3"
+    ]
+  },
+  {
+    "id": "upload-path-traversal",
+    "titleKey": "vuln.upload-path-traversal.title",
+    "descriptionKey": "vuln.upload-path-traversal.description",
+    "taskKey": "vuln.upload-path-traversal.task",
+    "link": "https://owasp.org/www-community/attacks/Path_Traversal",
+    "hintsKeys": [
+      "vuln.upload-path-traversal.hint0",
+      "vuln.upload-path-traversal.hint1",
+      "vuln.upload-path-traversal.hint2",
+      "vuln.upload-path-traversal.hint3",
+      "vuln.upload-path-traversal.hint4",
+      "vuln.upload-path-traversal.hint5"
+    ]
+  },
+  {
+    "id": "ssrf",
+    "titleKey": "vuln.ssrf.title",
+    "descriptionKey": "vuln.ssrf.description",
+    "taskKey": "vuln.ssrf.task",
+    "link": "https://owasp.org/www-community/attacks/Server_Side_Request_Forgery",
+    "hintsKeys": [
+      "vuln.ssrf.hint0",
+      "vuln.ssrf.hint1",
+      "vuln.ssrf.hint2",
+      "vuln.ssrf.hint3",
+      "vuln.ssrf.hint4"
+    ]
+  }
+]

@@ -1,0 +1,170 @@
+{
+  "vuln": {
+    "mass-assignment": {
+      "title": "Mass Assignment",
+      "description": "Serwer strony internetowej może nie filtrować czy przekazane pola w formularzu powinny się tam znaleźć. Może da się to jakoś wykorzystać?",
+      "task": "Spróbuj stworzyć konto o nazwie użytkownika \"HackedAdmin\", który będzie administratorem.",
+      "hint0": "Spróbuj za pomocą narzędzi sieciowych \"Network\" zobaczyć jakie zapytanie wysyła strona do API przy rejestracji. Czy da się takie zapytanie zmodyfikować i wysłać ponownie?",
+      "hint1": "Zmodyfikuj i wyślij zapytanie POST /register. Możesz to zrobić poprzez kliknięcie prawym przyciskiem na zapytanie i skopiowanie, np. Kopiuj jako \"fetch\". Następnie w konsoli przeglądarki wklej zapytanie. Zmodyfikuj je tak, aby nadać użytkownikowi prawa administratora.",
+      "hint2": "Do body zapytania dopisz: 'isAdmin: true'. To nada użytkownikowi prawa administratora. Pamiętaj o poprawnej nazwie użytkownika: HackedAdmin."
+    },
+    "token-forgery": {
+      "title": "Broken Access Control – Token Forgery",
+      "description": "Token uwierzytelniający użytkownika nie jest podpisany ani szyfrowany, a serwer ślepo ufa jego zawartości. Może uda się to wykorzystać do zdobycia uprawnień administratora?",
+      "task": "Zaloguj się na zwykłe konto, odczytaj token z localStorage i spróbuj podmienić jego zawartość, by uzyskać uprawnienia administratora.",
+      "hint0": "Token znajduje się w localStorage. Możesz go znaleźć w zakładce 'Aplikacja' w narzędziach w przeglądarce lub w konsoli - localStorage.getItem('token'). Sprawdź jego zawartość – może to zwykły base64?",
+      "hint1": "Odszyfruj token używając `atob()` lub narzędzia online (np. base64decode.org). Zobacz, jakie dane zawiera.",
+      "hint2": "Zmień część odkodowanego tokena tak, aby uzyskać dostęp do administratora. Zakoduj ponownie i wstaw token do localStorage.",
+      "hint3": "Ostatnią część tokena zamień z 'false' na 'true' i podmień token w localStorage.",
+      "hint4": "Podmienić token można w konsoli przeglądarki, używając `localStorage.setItem('token', 'nowa_wartość')`."
+    },
+    "weak-password-requirements": {
+      "title": "Weak Password Requirements",
+      "description": "Baza danych może być nie poprawnie zabezpieczona. Do zarządzania bazą często korzysta się z serwisów takich jak phpMyAdmin. Czy jesteś w stanie dostać się do bazy danych poprzez słabe hasło konta 'admin'?",
+      "task": "Połącz się z bazą danych MySQL i utwórz własną tabelę o nazwie 'hacked_table'.",
+      "hint0": "Najczęściej serwis phpMyAdmin uruchomiony jest pod portem 8080, 8081, 8082, 8888. Sprawdź któryś z tych portów.",
+      "hint1": "Wypróbuj standardowe hasła do konta admin: 'admin', 'root', 'password, '123456', 'zaq1@WSX'. A może konto admin nie ma hasła?",
+      "hint2": "Zaloguj się do phpMyAdmin jako admin z tym samym hasłem - admin.",
+      "hint3": "Kliknij po lewej stronie na bazę danych 'hackmart' kliknij 'Utwórz nową tabelę'. Nazwa tabeli: hacked_table, liczba kolumn: 1. Wybierz typ danych: INT, nazwa kolumny: id. Kliknij 'Zapisz'."
+    },
+    "cors-misconfig": {
+      "title": "Bad CORS configuration",
+      "description": "Zazwyczaj przeglądarka nie pozwala stronom internetowym na wykonywanie zapytań do obcych serwerów (czyli tzw. zapytań cross-origin). Czy API HackMart się rzeczywiście przed tym broni?",
+      "task": "Z poziomu własnej strony HTML (np. hostowanej lokalnie z pliku html), wykonaj zapytanie fetch do HackMart api hackmart - na endpoint /cors-misconfig.",
+      "hint0": "Zrób prostą stronę HTML, która będzie miała uruchamiała kod zawarty w <script>. wywołaj tam zapytanie fetch do /cors-misconfig.",
+      "hint1": "Zrób to w ten sposób: `<script>fetch('http://localhost:7000/api/cors-misconfig', { method: 'GET' })</script>` i zapisz jako plik .html.",
+      "hint2": "Otwórz plik w przeglądarce i sprawdź, czy odpowiedź z serwera zawiera nagłówek 'Access-Control-Allow-Origin: null'. Jeśli tak, to znaczy, że serwer nie jest poprawnie skonfigurowany i występuje podatność na atak CORS."
+    },
+    "missing-rate-limiting": {
+      "title": "Missing Rate Limiting (CWE-770)",
+      "description": "Czy aplikacja HackMart chroni się przed zbyt dużą liczbą żądań w krótkim czasie? Brak limitu może pozwolić atakującemu na masowe tworzenie kont, próbę brute-force lub nadużywanie zasobów serwera.",
+      "task": "Spróbuj zarejestrować 20 kont w ciągu 5 sekund, wysyłając wiele zapytań POST /auth/register. Jeśli wszystkie zostaną utworzone — oznacza to, że aplikacja nie stosuje ograniczeń i występuje podatność.",
+      "hint0": "Napisz prosty skrypt w JavaScript, który 20 razy wyśle zapytanie fetch POST do /api/auth/register z kolejnymi nazwami użytkowników (np. user0, user1, user2...).",
+      "hint1": "Kod możesz uruchomić w konsoli przeglądarki ( narzędzia developera -> zakładka Console ).",
+      "hint2": "Przykładowy kod: `for (let i = 0; i < 20; i++) { fetch('http://localhost:7000/api/auth/register', { method: 'POST', body: JSON.stringify({ username: 'user' + i, password: 'password' }), headers: { 'Content-Type': 'application/json' } }); }`"
+    },
+    "xss": {
+      "title": "Cross-Site Scripting (XSS)",
+      "description": "Czy aplikacja HackMart filtruje dane wprowadzane przez użytkownika? A może pozwala na wykonanie dowolnego kodu JavaScript, takiego jak `alert(...)`?",
+      "task": "Zarejestruj użytkownika, którego pole `First Name` zawiera złośliwy kod HTML. Jeśli uda Ci się wywołać `alert(...)` – podatność została wykorzystana. Czy możesz wykonać to poprzez `<script>`?",
+      "hint0": "Obecnie przeglądarki są zabezpieczone przed wykonaniem `<script>`. Zamiast używać tego, spróbuj użyć tagu `<img>` z atrybutem `onerror`.",
+      "hint1": "Przykład: `<img src=x onerror=alert(1)>` - ustaw tą wartość w polu `First Name` podczas rejestracji."
+    },
+    "idor": {
+      "title": "Insecure Direct Object Reference (IDOR)",
+      "description": "Czy aplikacja HackMart sprawdza, czy użytkownik ma prawo edytować cudze konto? Czy istnieje weryfikacja, czy token użytkownika ma dostęp do zmiany danych? A może wystarczy zmienić numer ID w adresie URL, by uzyskać dostęp do danych innych użytkowników?",
+      "task": "Spróbuj zakualizować dane użytkownika, a nastęnie wykorzystaj to zapytanie do zmiany danych innego użytkownika. Użytkownik o id `2` powinien mieć ustawione imię jako `zhakowany` i nazwisko jako `test`.",
+      "hint0": "Zaloguj się jako zwykły użytkownik i wejdź w zakładkę `ACCOUT`. Zmodyfikuj dane użytkownika, a następnie kliknij `Zapisz`. Zobacz, jakie zapytanie zostało wysłane do API.",
+      "hint1": "Spróbuj wysłać to żądanie PUT do `/api/users/2`, mimo że to nie jest Twój profil. Wprowadź modyfikacje w polach, aby ustawić imię jako `zhakowany` i nazwisko jako `test`.",
+      "hint2": "Zmodyfikowane zapytanie powinno wyglądać tak: fetch('http://localhost:7000/api/user/2', {method: 'PUT', headers: {Authorization: 'TWÓJ_TOKEN', 'Content-Type': 'application/json'}, body: JSON.stringify({ firstName: 'zhakowany', lastName: 'test' })});"
+    },
+    "improper-input-validation": {
+      "title": "Improper Input Validation",
+      "description": "Czy serwer HackMart naprawdę weryfikuje dane przesyłane z zapytania klienta? A może ślepo ufa, że użytkownik nie zmodyfikuje ich ręcznie? Spróbuj zmienić ilość zamawianych produktów. Czy jesteś w stanie zamówić więcej produktów niż jest dostępne?",
+      "task": "Zmodyfikuj żądanie zamówienia w taki sposób, aby spowodowało ujemny stan magazynowy produktu w bazie danych.",
+      "hint0": "Zamówienie można złożyć w zakładce `Koszyk`. Wybierz produkty, które chcesz zamówić i kliknij `Złóż zamówienie`.",
+      "hint1": "Zaloguj się jako zwykły użytkownik i dodaj produkty do koszyka. Następnie przechwyć zapytanie, zmodifikuj je i wyślij ponownie.",
+      "hint2": "Przechwyć zapytanie POST do `/api/orders` i zmień pole `quantity` na `1000`. Możesz to zrobić za pomocą narzędzi deweloperskich przeglądarki lub narzędzi takich jak Postman.",
+      "hint3": "Przykładowe zapytanie: `fetch('http://localhost:7000/api/orders', { method: 'POST', headers: { Authorization: TWÓJ_TOKEN }, body: JSON.stringify({ products: [{ id: 1, quantity: 1000 }] }) })` [ id może się różnić! ]."
+    },
+    "upload-path-traversal": {
+      "title": "Path Traversal przez dodanie pliku",
+      "description": "Aplikacja pozwala na przesyłanie plików, ale nie weryfikuje poprawności ich nazw. W rezultacie możliwe jest zapisanie pliku poza domyślnym folderem `uploads/`, np. w katalogu `static/`, który jest publicznie dostępny z poziomu przeglądarki. Pozwala to na umieszczenie złośliwego pliku HTML lub JS w aplikacji. Uwaga: samo skopiowanie zapytania z przeglądarki może nie wystarczyć, ponieważ w taki sposób nie zawsze przesyłana jest prawdziwa zawartość pliku. W razie problemów warto użyć JavaScript i `FormData()` do ręcznego utworzenia pliku.",
+      "task": "Twoim celem jest przesłanie pliku HTML, który zostanie zapisany poza folderem uploads – dokładnie w `src/main/resources/static/`. Po wykonaniu ataku powinieneś być w stanie otworzyć ten plik w przeglądarce pod adresem `http://localhost:7000/hacked.html` i zobaczyć jego zawartość.",
+      "hint0": "Użyj formularza dodawania produktu w HackMart i wybierz plik `.html` zawierający np. `<h1>Hak!</h1><script>alert('XSS')</script>`.",
+      "hint1": "Otwórz zakładkę `Network`, znajdź zapytanie `POST /api/products`, kliknij prawym → `Copy as fetch`, a następnie wklej kod do konsoli przeglądarki.",
+      "hint2": "Zmień tylko `filename=\"cokolwiek.html\"` na `filename=\"../src/main/resources/static/hacked.html\"`, żeby spróbować zapisać plik poza folderem `uploads/`. Wyślij zapytanie – ale zauważ, że plik się nie zapisuje. Dlaczego? Przeglądarka nie dołącza danych binarnych pliku przy kopiowaniu requestu jako tekst.",
+      "hint3": "Zastanów się: jak w JavaScript stworzyć plik z zawartością i nazwą, zanim wyśle się go przez `fetch()`? Istnieje sposób, aby utworzyć plik w pamięci i umieścić go w `FormData` wraz z innymi danymi formularza? Pamiętaj, że potrzebujesz również tokena autoryzacyjnego, aby wysłać zapytanie. Możesz go znaleźć w `localStorage` lub w nagłówku `Authorization` w zapytaniu.",
+      "hint4": "Spróbuj użyć: 1) `new File([...], \"nazwa\", {...})` – aby utworzyć plik, 2) `FormData` – aby dodać go jako pole formularza, 3) `fetch()` – aby wysłać całość z tokenem.",
+      "hint5": "```js\nconst token = localStorage.getItem(\"token\");\n\nconst formData = new FormData();\nformData.append(\"name\", \"testowy\");\nformData.append(\"price\", \"13.99\");\nformData.append(\"stock\", \"5\");\n\nconst fileContent = \"<h1>Hak!</h1><script>alert('XSS')</script>\";\nconst file = new File([fileContent], \"../src/main/resources/static/hacked.html\", { type: \"text/html\" });\nformData.append(\"image\", file);\n\nfetch(\"http://localhost:7000/api/products\", {\n  method: \"POST\",\n  headers: {\n    Authorization: token\n  },\n  body: formData\n});\n```"
+    },
+    "ssrf": {
+      "title": "SSRF – Misja z ukrytym hasłem",
+      "description": "serwer aplikacji pozwala na pobieranie zewnętrznych plików przez parametr `url` w endpointzie `/api/fetch`. Brakuje jednak walidacji tego adresu, co pozwala na tzw. Server-Side Request Forgery (SSRF). Możliwe jest wykorzystanie tej podatności do odczytania plików znajdujących się lokalnie na serwerze.",
+      "task": "Twoim celem jest odczytanie zawartości pliku `password.txt`, który znajduje się w katalogu głównym serwera. Plik ten zawiera sekret potrzebny do zaliczenia zadania.",
+      "hint0": "Zajrzyj na stronę główną HackMart i zobacz, w jaki sposób ładowane są loga partnerów. Zwróć uwagę na URL, który je ładuje.",
+      "hint1": "Endpoint `/api/fetch` przyjmuje parametr `url`, który może wskazywać na dowolny zewnętrzny adres. Czy możesz go użyć również do wskazania pliku zamiast obrazka?",
+      "hint2": "Spróbuj wykonać zapytanie z własnej przeglądarki lub przez Postmana/curl. Przykład: `/api/fetch?url=http://example.com`.",
+      "hint3": "Zamień adres URL na lokalną ścieżkę do pliku: `/api/fetch?url=file:///password.txt`.",
+      "hint4": "Plik zawiera ukrytą misję. Wykonaj ją, aby zaliczyć zadanie."
+    }
+  },
+  "auth": {
+    "logIn": "Zaloguj się",
+    "loggingIn": "Logowanie...",
+    "register": "Zarejestruj się",
+    "username": "Nazwa użytkownika",
+    "password": "Hasło",
+    "confirmPassword": "Potwierdź hasło",
+    "account": "Konto",
+    "email": "Email",
+    "firstName": "Imię",
+    "lastName": "Nazwisko",
+    "currentPassword": "Obecne hasło (jeśli chcesz je zmienić)",
+    "newPassword": "Nowe hasło",
+    "saveChanges": "Zapisz zmiany",
+    "saving": "Zapisywanie...",
+    "loading": "Ładowanie...",
+    "logOut": "Wyloguj się"
+  },
+  "cart": {
+    "addToCart": "Dodaj do koszyka",
+    "inCart": "W koszyku",
+    "cart": "Koszyk",
+    "confirmOrder": "Potwierdź zamówienie",
+    "addProduct": "Dodaj produkt",
+    "quantity": "Ilość",
+    "inStock": "W magazynie",
+    "loginToProcced": "Zaloguj się by złożyć zamówienie",
+    "orderConfirmed": "Zamówienie potwierdzone.",
+    "emptyTitle": "Twój koszyk jest pusty",
+    "emptyDescription": "Wygląda na to, że nie dodałeś jeszcze żadnych produktów.",
+    "backToShop": "Wróć do zakupów",
+    "update": "Zaktualizuj",
+    "save": "Zapisz",
+    "cancel": "Anuluj",
+    "change": "Zmień"
+  },
+  "admin": {
+    "panel": "Panel administratora",
+    "manageProducts": "Zarządzaj produktami",
+    "hackerPanel": "Panel Hakera",
+    "unfinished": "Nieukończone",
+    "finished": "Ukończone",
+    "resetInfo": "Czy na pewno chcesz przywrócić domyślny stan bazy danych?",
+    "reset": "Zresetuj postęp i bazę danych",
+    "resetSucess": "Resetowanie bazy danych zakończone sukcesem.",
+    "resetError": "Błąd podczas resetowania bazy danych.",
+    "seeMore": "Zobacz więcej",
+    "hints": "Podpowiedzi",
+    "task": "Zadanie",
+    "description": "Opis",
+    "showAnotherHint": "Odkryj następną podpowiedź",
+    "yourAccount": "Twoje Konto"
+  },
+  "info": {
+    "addedToCartSuccess": "Produkt dodany do koszyka.",
+    "profileUpdateSuccess": "Profil został zaktualizowany.",
+    "profileUpdateError": "Błąd podczas aktualizacji profilu użytkownika.",
+    "registerSuccess": "Rejestracja zakończona sukcesem.",
+    "registerError": "Błąd podczas rejestracji.",
+    "loginSuccess": "Zalogowano pomyślnie.",
+    "loginError": "Niepoprawna nazwa użytkownika lub hasło."
+  },
+  "product": {
+    "title": "Produkty",
+    "name": "Nazwa",
+    "stock": "Stan magazynowy",
+    "price": "Cena",
+    "actions": "Akcje",
+    "edit": "Edytuj",
+    "imagePreview": "Podgląd zdjęcia",
+    "uploadImage": "Prześlij zdjęcie",
+    "editProduct": "Edytuj produkt",
+    "recommendations": "Nasze rekomendacje",
+    "partners": "Nasi partnerzy",
+    "addProduct": "Dodaj produkt",
+    "productsCatalog": "Katalog Produktów"
+
+  }
+}

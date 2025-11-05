@@ -1,0 +1,71 @@
+services:
+  mysql:
+    image: mysql:8
+    container_name: hackmart-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: aw5sk83ee8
+      MYSQL_DATABASE: hackmart
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-paw5sk83ee8"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+    restart: unless-stopped
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: hackmart-pma
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: "3306"
+      PMA_USER: admin
+      PMA_PASSWORD: admin
+      PMA_ARBITRARY: "1"
+    ports:
+      - "8080:80"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    restart: always
+
+  backend:
+    container_name: hackmart-backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+      SERVER_PORT: 7000
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/hackmart?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: admin
+      APP_UPLOADS_DIR: file:/app/uploads/   # <-- kluczowe: gdzie w kontenerze są pliki
+    volumes:
+      - ./backend/uploads:/app/uploads      # <-- kluczowe: mapowanie host -> kontener
+    ports:
+      - "7000:7000"
+    expose: ["8085"]
+    depends_on:
+      mysql:
+        condition: service_healthy
+    restart: unless-stopped
+
+  web:
+    container_name: hackmart-web
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    depends_on:
+      backend:
+        condition: service_started
+    restart: unless-stopped
+
+volumes:
+  mysql_data:

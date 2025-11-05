@@ -1,0 +1,172 @@
+{
+  "vuln": {
+    "mass-assignment": {
+      "title": "Mass Assignment",
+      "description": "The website backend may not filter which fields in the form are allowed. Maybe there's a way to exploit this?",
+      "task": "Try creating an account named \"HackedAdmin\" that has administrator privileges.",
+      "hint0": "Use the \"Network\" tab in developer tools to see what request is sent to the API during registration. Can you modify and resend it?",
+      "hint1": "Modify and resend the POST /register request. You can do this by right-clicking the request and copying it as \"fetch\". Then paste it into the browser console and edit it to grant admin privileges.",
+      "hint2": "In the body of the request, add: 'isAdmin: true'. This will give the user administrator rights. Make sure the username is: HackedAdmin."
+    },
+    "token-forgery": {
+      "title": "Broken Access Control – Token Forgery",
+      "description": "The user authentication token is neither signed nor encrypted, and the backend blindly trusts its content. Can you exploit this to gain admin privileges?",
+      "task": "Log in with a regular account, read the token from localStorage and try to modify its content to gain administrator access.",
+      "hint0": "The token is stored in localStorage. You can find it in the 'Application' tab in developer tools or using localStorage.getItem('token') in the console. Check its content — maybe it's just base64?",
+      "hint1": "Decode the token using `atob()` or an online tool (e.g., base64decode.org). See what data it contains.",
+      "hint2": "Modify the decoded token so you can get administrator access. Encode it again and store it in localStorage.",
+      "hint3": "Change the last part of the token from 'false' to 'true' and update the token in localStorage.",
+      "hint4": "You can update the token in the browser console using `localStorage.setItem('token', 'new_value')`."
+    },
+    "weak-password-requirements": {
+      "title": "Weak Password Requirements",
+      "description": "The database may not be properly secured. Tools like phpMyAdmin are often used to manage the database. Can you access it using weak admin credentials?",
+      "task": "Connect to the MySQL database and create a new table named 'hacked_table'.",
+      "hint0": "phpMyAdmin is most often running on ports like 8080, 8081, 8082, or 8888. Check these ports.",
+      "hint1": "Try default admin passwords: 'admin', 'root', 'password', '123456', 'zaq1@WSX'. Maybe the admin account has no password?",
+      "hint2": "Log into phpMyAdmin as admin with the same password - admin.",
+      "hint3": "Click on the 'hackmart' database on the left, then click 'Create new table'. Table name: hacked_table, number of columns: 1. Choose data type: INT, column name: id. Click 'Save'."
+    },
+    "cors-misconfig": {
+      "title": "Bad CORS Configuration",
+      "description": "Usually, browsers do not allow websites to make requests to foreign servers (so-called \"cross-origin\" requests). Does the HackMart API actually defend against this?",
+      "task": "From your own HTML page (e.g. hosted locally from a .html file), perform a fetch request to the HackMart API endpoint /cors-misconfig.",
+      "hint0": "Create a simple HTML page that runs JavaScript inside a <script> tag. Use it to send a fetch request to /cors-misconfig.",
+      "hint1": "Do it like this: `<script>fetch('http://localhost:7000/api/cors-misconfig', { method: 'GET' })</script>` and save it as an .html file.",
+      "hint2": "Open the file in your browser and check if the server response contains the header 'Access-Control-Allow-Origin: null'. If so, it means the server is misconfigured and vulnerable to a CORS attack."
+    },
+    "missing-rate-limiting": {
+      "title": "Missing Rate Limiting (CWE-770)",
+      "description": "Does HackMart protect itself against a high number of requests in a short time? Lack of rate limiting can allow attackers to mass-create accounts, brute-force credentials, or abuse server resources.",
+      "task": "Try registering 20 accounts within 5 seconds by sending multiple POST /auth/register requests. If all accounts are created — it means rate limiting is not enforced and a vulnerability exists.",
+      "hint0": "Write a simple JavaScript script that sends 20 POST fetch requests to /api/auth/register with usernames like user0, user1, user2...",
+      "hint1": "You can run this code in your browser's developer console (DevTools -> Console tab).",
+      "hint2": "Example code: `for (let i = 0; i < 20; i++) { fetch('http://localhost:7000/api/auth/register', { method: 'POST', body: JSON.stringify({ username: 'user' + i, password: 'password' }), headers: { 'Content-Type': 'application/json' } }); }`"
+    },
+    "xss": {
+      "title": "Cross-Site Scripting (XSS)",
+      "description": "Does the HackMart application sanitize user input? Or does it allow execution of arbitrary JavaScript code like `alert(...)`?",
+      "task": "Register a user whose `First Name` field contains malicious HTML code. If you're able to trigger `alert(...)` — the vulnerability has been exploited. Can you do it using `<script>`?",
+      "hint0": "Modern browsers block execution of `<script>`. Instead of that, try using the `<img>` tag with an `onerror` attribute.",
+      "hint1": "Example: `<img src=x onerror=alert(1)>` — use this value in the `First Name` field during registration."
+    },
+    "idor": {
+      "title": "Insecure Direct Object Reference (IDOR)",
+      "description": "Does the HackMart application verify whether a user is allowed to edit another user's account? Is there any verification that the user's token grants access to the data? Or maybe you can simply change the ID in the URL to access someone else's data?",
+      "task": "Try to update your own user data, then use the same request to modify data of another user. The user with id `2` should have the first name set to `zhakowany` and last name to `test`.",
+      "hint0": "Log in as a regular user and go to the `ACCOUNT` tab. Edit your profile and click `Save`. Observe the request sent to the API.",
+      "hint1": "Try sending that same PUT request to `/api/users/2`, even though it's not your profile. Modify the fields to set first name to `zhakowany` and last name to `test`.",
+      "hint2": "The modified request should look like: fetch('http://localhost:7000/api/user/2', {method: 'PUT', headers: {Authorization: 'YOUR_TOKEN', 'Content-Type': 'application/json'}, body: JSON.stringify({ firstName: 'zhakowany', lastName: 'test' })});"
+    },
+    "improper-input-validation": {
+      "title": "Improper Input Validation",
+      "description": "Does the HackMart backend actually validate the data sent from the frontend? Or does it blindly trust that the user won’t modify it? Try changing the quantity of ordered products. Can you order more than what's available?",
+      "task": "Modify an order request so that it causes a negative stock value for a product in the database.",
+
+      "hint0": "Orders can be placed via the `Cart` tab. Select the products you want and click `Place Order`.",
+      "hint1": "Log in as a regular user and add products to the cart. Then intercept the request, modify it, and send it again.",
+      "hint2": "Intercept the POST request to `/api/orders` and change the `quantity` field to `1000`. You can do this using browser dev tools or tools like Postman.",
+      "hint3": "Example request: `fetch('http://localhost:7000/api/orders', { method: 'POST', headers: { Authorization: YOUR_TOKEN }, body: JSON.stringify({ products: [{ id: 1, quantity: 1000 }] }) })` [ id may differ! ]"
+    },
+    "upload-path-traversal": {
+      "title": "Path Traversal via File Upload",
+      "description": "The application allows file uploads but does not properly validate file names. As a result, it is possible to save a file outside the default `uploads/` folder, for example in the `static/` directory, which is publicly accessible from the browser. This allows an attacker to place malicious HTML or JS files in the application. Note: simply copying the request from the browser may not be enough, as it often omits the real binary content of the file. If you run into issues, use JavaScript and `FormData()` to manually create the file.",
+      "task": "Your goal is to upload an HTML file and have it saved outside the uploads folder – specifically in `src/main/resources/static/`. After completing the attack, you should be able to open the file in your browser at `http://localhost:7000/hacked.html` and see its content.",
+      "hint0": "Use the product upload form in HackMart and select a `.html` file containing something like `<h1>Hack!</h1><script>alert('XSS')</script>`.",
+      "hint1": "Open the `Network` tab, find the `POST /api/products` request, right-click → `Copy as fetch`, then paste the code into your browser console.",
+      "hint2": "Only change `filename=\"whatever.html\"` to `filename=\"../src/main/resources/static/hacked.html\"` to try saving the file outside of `uploads/`. Send the request — but note that the file may not save. Why? Because the browser doesn’t include binary file content when copying the request as text.",
+      "hint3": "Think: how can you create a file in JavaScript with specific content and name before sending it via `fetch()`? Is there a way to create the file in memory and attach it to `FormData` along with other form fields? Don’t forget — you’ll also need an authorization token. You can find it in `localStorage` or in the `Authorization` header of the request.",
+      "hint4": "Try using: 1) `new File([...], \"name\", {...})` – to create a file, 2) `FormData` – to attach it to a form, 3) `fetch()` – to send the request with the token.",
+      "hint5": "```js\nconst token = localStorage.getItem(\"token\");\n\nconst formData = new FormData();\nformData.append(\"name\", \"test\");\nformData.append(\"price\", \"13.99\");\nformData.append(\"stock\", \"5\");\n\nconst fileContent = \"<h1>Hack!</h1><script>alert('XSS')</script>\";\nconst file = new File([fileContent], \"../src/main/resources/static/hacked.html\", { type: \"text/html\" });\nformData.append(\"image\", file);\n\nfetch(\"http://localhost:7000/api/products\", {\n  method: \"POST\",\n  headers: {\n    Authorization: token\n  },\n  body: formData\n});\n```"
+    },
+    "ssrf": {
+      "title": "SSRF – Hidden Password Mission",
+      "description": "The application's backend allows downloading external files via the `url` parameter in the `/api/fetch` endpoint. However, this address is not validated, which makes the application vulnerable to Server-Side Request Forgery (SSRF). This vulnerability can be used to read files located on the server itself.",
+      "task": "Your goal is to read the contents of the `password.txt` file located in the root directory of the server. This file contains a secret needed to complete the challenge.",
+      "hint0": "Visit HackMart's homepage and observe how partner logos are loaded. Pay attention to the URL used to fetch them.",
+      "hint1": "The `/api/fetch` endpoint accepts a `url` parameter that can point to any external address. Can you use it to point to a file instead of an image?",
+      "hint2": "Try making a request from your browser or via Postman/curl. Example: `/api/fetch?url=http://example.com`.",
+      "hint3": "Change the URL to a local file path: `/api/fetch?url=file:///password.txt`.",
+      "hint4": "The file contains a hidden mission — complete it to finish the challenge."
+    }
+  },
+
+  "auth": {
+    "logIn": "Log In",
+    "loggingIn": "Logging in...",
+    "register": "Sign Up",
+    "username": "Username",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "account": "Account",
+    "email": "Email",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "currentPassword": "Current password (if you want to change it)",
+    "newPassword": "New password",
+    "saveChanges": "Save changes",
+    "saving": "Saving...",
+    "loading": "Loading...",
+    "logOut": "Log Out"
+  },
+  "cart": {
+    "addToCart": "Add to Cart",
+    "inCart": "In Cart",
+    "cart": "Cart",
+    "confirmOrder": "Confirm order",
+    "addProduct": "Add Product",
+    "quantity": "Quantity",
+    "inStock": "In Stock",
+    "loginToProcced": "Log in to proceed with checkout",
+    "orderConfirmed": "Order confirmed.",
+    "emptyTitle": "Your cart is empty",
+    "emptyDescription": "It looks like you haven't added any products yet.",
+    "backToShop": "Back to shopping",
+    "update": "Update",
+    "save": "Save",
+    "cancel": "Cancel",
+    "change": "Change"
+  },
+  "admin": {
+    "panel": "Admin Panel",
+    "manageProducts": "Manage Products",
+    "hackerPanel": "Hacker Panel",
+    "unfinished": "Unfinished",
+    "finished": "Finished",
+    "resetInfo": "Are you sure you want to restore default state of database?",
+    "reset": "Reset progress and database",
+    "resetSucess": "Resetting database finished successfully.",
+    "resetError": "Resetting database occured an error.",
+    "seeMore": "See more",
+    "hints": "Hints",
+    "task": "Task",
+    "description": "Description",
+    "showAnotherHint": "Show another hint",
+    "yourAccount": "Your Account"
+  },
+  "info": {
+    "addedToCartSuccess": "Item added to cart successfully.",
+    "profileUpdateSuccess": "Profile updated successfully.",
+    "profileUpdateError": "Error while updating profile.",
+    "loginSuccess": "Successfully logged in.",
+    "registerSuccess": "Registration has been completed.",
+    "registerError": "Error during registration.",
+    "loginError": "Invalid username or password."
+  },
+
+  "product": {
+    "title": "Products",
+    "name": "Name",
+    "stock": "In stock",
+    "price": "Price",
+    "actions": "Actions",
+    "edit": "Edit",
+    "imagePreview": "Image preview",
+    "uploadImage": "Upload image",
+    "editProduct": "Edit product",
+    "recommendations": "Recommendations",
+    "partners": "Partners",
+    "addProduct": "Add Product",
+    "productsCatalog": "Products Catalog"
+  }
+}
