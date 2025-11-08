@@ -55,8 +55,8 @@ services:
         condition: service_healthy
     restart: unless-stopped
 
-  web:
-    container_name: hackmart-web
+  frontend:
+    container_name: hackmart-frontend
     build:
       context: ./frontend
       dockerfile: Dockerfile

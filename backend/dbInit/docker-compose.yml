@@ -1,7 +1,6 @@
 services:
   mysql:
     image: mysql:8
-    container_name: hackmart-mysql
     environment:
       MYSQL_ROOT_PASSWORD: aw5sk83ee8
       MYSQL_DATABASE: hackmart
@@ -10,21 +9,22 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - mysql_data:/var/lib/mysql
+      - mysql_data_dev:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-proot"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-paw5sk83ee8"]
       interval: 5s
       timeout: 3s
       retries: 20
     restart: unless-stopped
 
   phpmyadmin:
-    image: phpmyadmin
-    container_name: hackmart-pma
+    image: phpmyadmin:latest
     environment:
       PMA_HOST: mysql
       PMA_PORT: "3306"
-      PMA_ALLOW_NO_PASSWORD: "1"
+      PMA_USER: admin
+      PMA_PASSWORD: admin
+      PMA_ARBITRARY: "1"
     ports:
       - "8080:80"
     depends_on:
@@ -33,4 +33,4 @@ services:
     restart: always
 
 volumes:
-  mysql_data:
+  mysql_data_dev:

