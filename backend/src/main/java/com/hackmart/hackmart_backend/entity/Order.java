@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "orders") // ← unikamy kolizji ze słowem kluczowym
+@Table(name = "orders")
 public class Order {
 
     @Id
@@ -20,7 +20,6 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> items = new ArrayList<>();
 
-    // konstruktory
     public Order() {}
 
     public Order(Long userId) {
@@ -28,7 +27,6 @@ public class Order {
         this.createdAt = LocalDateTime.now();
     }
 
-    // gettery i settery
     public Long getId() {
         return id;
     }

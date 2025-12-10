@@ -38,11 +38,9 @@ public class OrderService {
                     Product product = productRepository.findById(itemRequest.getProductId())
                             .orElseThrow(() -> new RuntimeException("Product does not exist"));
 
-                    // 🔻 Brak walidacji stocku – podatność
                     int newStock = product.getStock() - itemRequest.getQuantity();
                     product.setStock(newStock);
                     productRepository.save(product);
-                    System.out.println("product.getId()");
 
                     return new OrderItem(
                             product.getId(),
@@ -56,7 +54,6 @@ public class OrderService {
         order.setItems(items);
         orderRepository.save(order);
 
-        // 🔍 Sprawdzenie, czy stock któregoś produktu spadł poniżej 0
         progressService.checkImproperInputValidationCompleted();
     }
 
@@ -78,11 +75,10 @@ public class OrderService {
 
     @Transactional
     public void resetOrders() {
-        // Najpierw usuwamy OrderItem (jeśli istnieje relacja z kaskadą, czasem wystarczy usunąć Order)
         entityManager.createNativeQuery("DELETE FROM order_item").executeUpdate();
         entityManager.createNativeQuery("DELETE FROM orders").executeUpdate();
 
-        System.out.println("🧹 Zresetowano wszystkie zamówienia i pozycje zamówień.");
+        System.out.println("Reset successfull.");
     }
 
 

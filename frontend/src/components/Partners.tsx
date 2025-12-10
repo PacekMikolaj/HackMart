@@ -1,8 +1,7 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
-import { fetchPartners } from "../api/partners"; // przykładowa ścieżka
+import { fetchPartners } from "../api/partners";
 import {
-  Box,
   Grid,
   Typography,
   CircularProgress,

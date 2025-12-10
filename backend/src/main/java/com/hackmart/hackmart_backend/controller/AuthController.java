@@ -26,7 +26,6 @@ public class AuthController {
         this.userRepository = userRepository;
     }
 
-    // Endpoint: POST /api/auth/register
     @PostMapping("/register")
     public ResponseEntity<UserResponse> register(@RequestBody RegisterRequest request) {
         UserResponse registered = userService.register(request);

@@ -19,7 +19,6 @@ public class OrderItem {
     @JoinColumn(name = "order_id")
     private Order order;
 
-    // konstruktory
     public OrderItem() {}
 
     public OrderItem(Long productId, int quantity, Double unitPrice) {
@@ -28,7 +27,6 @@ public class OrderItem {
         this.unitPrice = unitPrice;
     }
 
-    // gettery i settery
     public Long getId() {
         return id;
     }

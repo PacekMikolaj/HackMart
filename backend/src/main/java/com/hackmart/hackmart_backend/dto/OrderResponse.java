@@ -26,13 +26,11 @@ public class OrderResponse {
             this.unitPrice = unitPrice;
         }
 
-        // Gettery
         public Long getProductId() { return productId; }
         public int getQuantity() { return quantity; }
         public Double getUnitPrice() { return unitPrice; }
     }
 
-    // Gettery
     public Long getId() { return id; }
     public LocalDateTime getCreatedAt() { return createdAt; }
     public List<OrderItemResponse> getItems() { return items; }

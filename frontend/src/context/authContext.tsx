@@ -65,7 +65,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     (async () => {
       try {
         const data = await fetchUserProfile();
-        console.log(data);
         if (cancelled) return;
         setAuth({
           isAdmin: decodedToken.isAdmin,
@@ -133,9 +132,8 @@ function decodeToken(
 ): { id: number; username: string; isAdmin: boolean } | null {
   try {
     const decoded = atob(token);
-    console.log(decoded);
     const [id, username, isAdmin] = decoded.split(":");
-    console.log(isAdmin, isAdmin === "true");
+    
     return {
       id: parseInt(id),
       username,

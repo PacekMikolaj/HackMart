@@ -45,7 +45,7 @@ private final ProductRepository productRepository;
         progress.put("upload-path-traversal", checkUploadPathTraversalCompleted());
         progress.put("ssrf", checkSsrfCompleted());
 
-        System.out.println("Postęp: " + progress);
+        System.out.println("Progress: " + progress);
 
         return progress;
     }
@@ -73,15 +73,12 @@ private final ProductRepository productRepository;
 
         if(token == null) return false;
 
-        // 🔓 Rozkodowanie base64
         String decoded = new String(Base64.getDecoder().decode(token));
         String[] parts = decoded.split(":");
 
         if (parts.length < 3) {
             return false;
         }
-
-        System.out.println(decoded);
 
         Long userId = Long.parseLong(parts[0]);
         boolean isAdminInToken = "true".equalsIgnoreCase(parts[2]);
@@ -129,10 +126,9 @@ private final ProductRepository productRepository;
         if(request == null) return false;
 
         String origin = request.getHeader("Origin");
-        System.out.println("Origin: " + origin);
+
         if (origin == null || !origin.contains("http://localhost:3000")) {
             completedVulnerabilities.add(key);
-            System.out.println("✅ Wykryto wykorzystanie podatności CORS: zapytanie z originu " + origin);
             return true;
         }
 
@@ -145,10 +141,8 @@ private final ProductRepository productRepository;
 
         LocalDateTime fiveSecondsAgo = LocalDateTime.now().minusSeconds(5);
         long recentUsers = userRepository.countByCreatedAtAfter(fiveSecondsAgo);
-    System.out.println(recentUsers + " kont utworzono w ciągu ostatnich 5 sekund.");
         if (recentUsers >= 20) {
             completedVulnerabilities.add(key);
-            System.out.println("✅ Wykryto wykorzystanie podatności: brak limitu rejestracji – utworzono " + recentUsers + " kont w 5 sekund.");
             return true;
         }
 
@@ -171,7 +165,6 @@ private final ProductRepository productRepository;
 
         if (match) {
             completedVulnerabilities.add(key);
-            System.out.println("✅ Fancy regex wykrył XSS w firstName z <img onerror=alert(...)>");
             return true;
         }
 
@@ -183,7 +176,6 @@ private final ProductRepository productRepository;
         String key = "idor";
         if (completedVulnerabilities.contains(key)) return true;
 
-        // Pobieramy użytkownika o ID 2 (test)
         Optional<User> userOpt = userRepository.findById(2L);
         if (userOpt.isEmpty()) return false;
 
@@ -194,7 +186,6 @@ private final ProductRepository productRepository;
 
         if (match) {
             completedVulnerabilities.add(key);
-            System.out.println("✅ IDOR wykorzystany – imię i nazwisko użytkownika test zostały zmienione.");
             return true;
         }
 
@@ -207,7 +198,6 @@ private final ProductRepository productRepository;
 
         if (productRepository.existsWithNegativeStock()) {
             completedVulnerabilities.add(key);
-            System.out.println("✅ Wykryto produkt ze stanem magazynowym poniżej zera – klient zamówił więcej niż dostępne.");
             return true;
         }
 
@@ -218,10 +208,9 @@ private final ProductRepository productRepository;
         String key = "upload-path-traversal";
         if (completedVulnerabilities.contains(key)) return true;
 
-        Path path = Paths.get("src/main/resources/static/hacked.html"); // ⬅️ dopasuj ścieżkę jeśli inna!
+        Path path = Paths.get("src/main/resources/static/hacked.html");
         if (Files.exists(path)) {
             completedVulnerabilities.add(key);
-            System.out.println("✅ Wykryto plik hacked.html w katalogu static – podatność path traversal została wykorzystana.");
             return true;
         }
 
@@ -236,7 +225,6 @@ private final ProductRepository productRepository;
 
         if (user.isPresent()) {
             completedVulnerabilities.add(key);
-            System.out.println("✅ Wykryto użytkownika 'hackmart-ultimate-hacker' – podatność SSRF została wykorzystana.");
             return true;
         }
 

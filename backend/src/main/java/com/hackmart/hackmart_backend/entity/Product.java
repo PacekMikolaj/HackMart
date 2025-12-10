@@ -18,7 +18,6 @@ public class Product {
 
     private String imageUrl;
 
-    // Gettery i settery
     public Long getId() {
         return id;
     }

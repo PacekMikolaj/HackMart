@@ -35,12 +35,10 @@ public class UserService {
         this.defaultUserData = defaultUserData;
     }
 
-    // ----------------------------
-    // REJESTRACJA
     public UserResponse register(RegisterRequest request) {
         User user = new User();
         user.setUsername(request.username);
-        user.setPassword(passwordEncoder.encode(request.password)); // szyfrowanie hasła ✅
+        user.setPassword(passwordEncoder.encode(request.password));
         user.setEmail(request.email);
         user.setIsAdmin(request.isAdmin);
         user.setFirstName(request.firstName);
@@ -52,13 +50,9 @@ public class UserService {
         return mapToResponse(savedUser);
     }
 
-    // ----------------------------
-    // LOGOWANIE
     public Optional<LoginResponse> login(LoginRequest request) {
-        System.out.println(passwordEncoder.encode("fA4Vefcc"));
         return userRepository.findByUsername(request.username)
                 .filter(user -> {
-System.out.println(passwordEncoder.matches(request.password, user.getPassword()));
                             return passwordEncoder.matches(request.password, user.getPassword());
                         }
                 )
@@ -69,19 +63,14 @@ System.out.println(passwordEncoder.matches(request.password, user.getPassword())
                             Boolean.TRUE.equals(user.getIsAdmin())
                     );
                     LoginResponse loginResponse = new LoginResponse(token, user);
-                    System.out.println(loginResponse);
                     return new LoginResponse(token, user);
                 });
     }
 
-    // ----------------------------
-    // PROFIL
     public Optional<User> getUserById(Long id) {
         return userRepository.findById(id);
     }
 
-    // ----------------------------
-    // AKTUALIZACJA DANYCH
     public UserResponse updateUser(Long userId, UpdateUserRequest request) {
         Optional<User> userOpt = userRepository.findById(userId);
         if (userOpt.isEmpty()) {
@@ -91,7 +80,6 @@ System.out.println(passwordEncoder.matches(request.password, user.getPassword())
         User user = userOpt.get();
 
         if (request.newPassword != null && !request.newPassword.isBlank()) {
-            // Wymagaj poprawnego starego hasła
             if (request.oldPassword == null || !passwordEncoder.matches(request.oldPassword, user.getPassword())) {
                 throw new RuntimeException("Stare hasło jest nieprawidłowe");
             }
@@ -116,7 +104,7 @@ System.out.println(passwordEncoder.matches(request.password, user.getPassword())
         }
 
         if (request.isAdmin != null) {
-            user.setIsAdmin(request.isAdmin); // 💣 podatność zostaje
+            user.setIsAdmin(request.isAdmin);
         }
 
         User updated = userRepository.save(user);
@@ -125,8 +113,6 @@ System.out.println(passwordEncoder.matches(request.password, user.getPassword())
         return mapToResponse(updated);
     }
 
-    // ----------------------------
-    // MAPOWANIE
     public UserResponse mapToResponse(User user) {
         UserResponse res = new UserResponse();
         res.id = user.getId();

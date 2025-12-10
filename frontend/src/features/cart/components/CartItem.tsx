@@ -50,7 +50,6 @@ const CartItem = ({
           p: 1,
         }}
       >
-        {/* Zdjęcie */}
         <CardMedia
           component="img"
           sx={{
@@ -58,20 +57,16 @@ const CartItem = ({
             height: 120,
             objectFit: "contain",
             borderRadius: 1,
-            bgcolor: "#101e35", // pasuje do Twojego theme
+            bgcolor: "#101e35",
             p: 1,
           }}
           image={`http://localhost:7000/uploads/${product.imageUrl}`}
           alt={product.name}
         />
-
-        {/* Treść */}
         <CardContent sx={{ flex: 1 }}>
           <Typography variant="h6" fontWeight="bold">
             {product.name}
           </Typography>
-
-          {/* Cena + stock */}
           <Box display="flex" justifyContent="space-between" mt={1}>
             <Typography variant="body1" fontWeight="bold" color="primary.main">
               {product.price.toFixed(2)} zł
@@ -80,8 +75,6 @@ const CartItem = ({
               {t("cart.inStock")}: {product.stock}
             </Typography>
           </Box>
-
-          {/* Ilość + usuń */}
           <Box mt={2} display="flex" alignItems="center" gap={2}>
             <EditableQuantity
               value={quantity}
@@ -94,7 +87,6 @@ const CartItem = ({
                 setQuantity(newVal);
               }}
             />
-
             <IconButton
               onClick={() => removeFromCart(productId)}
               sx={{

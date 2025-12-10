@@ -5,13 +5,11 @@ import java.util.Base64;
 
 public class TokenUtil {
 
-    // Generuje token w formacie base64(userId:username:isAdmin)
     public static String generateToken(Long userId, String username, boolean isAdmin) {
         String raw = userId + ":" + username + ":" + isAdmin;
         return Base64.getEncoder().encodeToString(raw.getBytes(StandardCharsets.UTF_8));
     }
 
-    // Rozkodowuje token i zwraca dane
     public static DecodedToken decodeToken(String token) {
         try {
             byte[] decodedBytes = Base64.getDecoder().decode(token);
@@ -33,7 +31,6 @@ public class TokenUtil {
         }
     }
 
-    // Pomocnicza klasa wewnętrzna na rozkodowane dane
     public static class DecodedToken {
         public Long userId;
         public String username;
@@ -46,7 +43,6 @@ public class TokenUtil {
         }
     }
 
-    // Sprawdza, czy użytkownik jest adminem
     public static boolean isAdmin(String token) {
         try {
             return decodeToken(token).isAdmin;
@@ -55,7 +51,6 @@ public class TokenUtil {
         }
     }
 
-    // Zwraca id użytkownika
     public static Long getUserId(String token) {
         try {
             return decodeToken(token).userId;

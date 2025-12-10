@@ -33,7 +33,7 @@ public class ProductController {
 
     @GetMapping("/recommended")
     public List<Product> getRecommendedProducts() {
-        return productService.getRandomProducts(4); // 4 losowe
+        return productService.getRandomProducts(4);
     }
 
 

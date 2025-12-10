@@ -56,7 +56,6 @@ const Product = ({ product }: { product: ProductType }) => {
         <CardContent
           sx={{ flexGrow: 1, display: "flex", flexDirection: "column", gap: 1 }}
         >
-          {/* Nazwa – max 2 linie, reszta obcięta */}
           <Typography
             variant="h6"
             title={product.name}
@@ -65,13 +64,11 @@ const Product = ({ product }: { product: ProductType }) => {
               WebkitLineClamp: 2,
               WebkitBoxOrient: "vertical",
               overflow: "hidden",
-              minHeight: "3.2em", // trzyma wysokość tytułu
+              minHeight: "3.2em",
             }}
           >
             {product.name}
           </Typography>
-
-          {/* Cena + stan w jednym rzędzie */}
           <Stack
             direction="row"
             alignItems="center"
@@ -82,12 +79,8 @@ const Product = ({ product }: { product: ProductType }) => {
               {t("cart.inStock")}: {product.stock}
             </Typography>
           </Stack>
-
-          {/* Dystans, żeby przycisk zjechał na dół */}
           <Box sx={{ flexGrow: 1 }} />
         </CardContent>
-
-        {/* Przyciski zawsze na dole, wyśrodkowane */}
         <CardActions
           sx={{ pt: 0, pb: 2, justifyContent: "center", mt: "auto" }}
         >

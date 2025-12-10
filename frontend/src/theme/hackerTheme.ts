@@ -4,25 +4,25 @@ const hackerTheme = createTheme({
   palette: {
     mode: "dark",
     background: {
-      default: "#121212", // głębokie ciemnoszare tło
-      paper: "#1e1e1e", // panele, karty
+      default: "#121212",
+      paper: "#1e1e1e",
     },
     primary: {
-      main: "#00ff88", // neonowa zieleń
+      main: "#00ff88",
     },
     secondary: {
-      main: "#00c080", // ciemniejsza mięta
+      main: "#00c080",
     },
     text: {
-      primary: "#e0ffe0", // jasnozielonkawy tekst
-      secondary: "#8affc1", // pomocniczy / opisowy
+      primary: "#e0ffe0",
+      secondary: "#8affc1",
     },
   },
   shape: {
     borderRadius: 6,
   },
   typography: {
-    fontFamily: "'IBM Plex Mono', monospace", // klimatycznie terminalowo
+    fontFamily: "'IBM Plex Mono', monospace",
     button: {
       textTransform: "none",
       fontWeight: 600,

@@ -9,7 +9,7 @@ const AppLayout = () => {
     >
       <Header />
       <main style={{ flex: 1 }}>
-        <Outlet /> {/* 👈 to tutaj będą renderowane dzieci */}
+        <Outlet />
       </main>
       <Footer />
     </div>

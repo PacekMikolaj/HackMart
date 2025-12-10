@@ -1,30 +1,29 @@
-// theme.ts
 import { createTheme } from "@mui/material/styles";
 
 const theme = createTheme({
   palette: {
     mode: "light",
     background: {
-      default: "#0b1e3d", // tło całej strony
-      paper: "#16253d", // karty i kontenery (zamiast białego)
+      default: "#0b1e3d",
+      paper: "#16253d",
     },
 
     primary: {
-      main: "#1976d2", // niebieski
+      main: "#1976d2",
     },
     secondary: {
-      main: "#d32f2f", // czerwony
+      main: "#d32f2f",
     },
     text: {
-      primary: "#ffffff", // 🟢 Biały tekst – główny
-      secondary: "#90a4ae", // 🔵 Jasnoszary (np. opisy, stocki)
+      primary: "#ffffff",
+      secondary: "#90a4ae",
     },
   },
   components: {
     MuiAppBar: {
       styleOverrides: {
         root: {
-          backgroundColor: "#1b1f3b", // granatowe tło nagłówka
+          backgroundColor: "#1b1f3b",
           color: "#fff",
         },
       },

@@ -20,14 +20,12 @@ public class FetchController {
     public void fetchUrl(@RequestParam String url, HttpServletResponse response) {
         try {
             URL targetUrl = new URL(url);
-            URLConnection connection = targetUrl.openConnection(); // nie rzutujemy na HttpURLConnection
+            URLConnection connection = targetUrl.openConnection();
 
-            // Ustawienia timeoutów tylko jeśli to możliwe (dla HTTP można, dla FILE nie)
             try {
                 connection.setConnectTimeout(5000);
                 connection.setReadTimeout(5000);
             } catch (Exception ignored) {
-                // Niektóre połączenia (np. file://) nie wspierają timeoutów – ignorujemy
             }
 
             String contentType = connection.getContentType();
@@ -41,7 +39,7 @@ public class FetchController {
             }
 
         } catch (Exception e) {
-            e.printStackTrace(); // Możesz też użyć loggera
+            e.printStackTrace();
             response.setStatus(HttpStatus.BAD_REQUEST.value());
             try {
                 response.getWriter().write("Błąd: " + e.getMessage());

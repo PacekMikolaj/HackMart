@@ -5,12 +5,9 @@ import React, {
   useState,
   ReactNode,
 } from "react";
-
-import { CartItem } from "../types/cart"; // Importujemy typ CartItem
+import { CartItem } from "../types/cart";
 import { useSnackbar } from "notistack";
 import { useTranslation } from "react-i18next";
-
-// Typ kontekstu
 interface CartContextType {
   cartItems: CartItem[];
   addToCart: (productId: number, quantity?: number) => void;
@@ -18,10 +15,8 @@ interface CartContextType {
   clearCart: () => void;
 }
 
-// Tworzymy kontekst
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
-// Provider
 export const CartProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
@@ -34,7 +29,6 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
 
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cartItems));
-    console.log("Cart items updated:", cartItems);
   }, [cartItems]);
 
   const addToCart = (productId: number, quantity: number = 1) => {
@@ -70,7 +64,6 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
   );
 };
 
-// Hook do korzystania z koszyka
 export const useCart = (): CartContextType => {
   const context = useContext(CartContext);
   if (!context) {

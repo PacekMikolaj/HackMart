@@ -18,14 +18,9 @@ public class CorsEchoFilter implements Filter {
         HttpServletResponse res = (HttpServletResponse) response;
 
         String origin = req.getHeader("Origin");
-        System.out.println("🔥🔥 CORS FILTER FIRED: Origin = " + origin);
-
-
-
-
 
         if (origin != null) {
-            res.setHeader("Access-Control-Allow-Origin", origin); // 💣 echo origin
+            res.setHeader("Access-Control-Allow-Origin", origin);
             res.setHeader("Access-Control-Allow-Credentials", "true");
             res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
             res.setHeader("Access-Control-Allow-Headers", "*");

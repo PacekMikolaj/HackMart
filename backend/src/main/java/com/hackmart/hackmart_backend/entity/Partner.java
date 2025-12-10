@@ -18,17 +18,14 @@ public class Partner {
     @Column(name = "website_url")
     private String websiteUrl;
 
-    // --- Konstruktor domyślny ---
     public Partner() {}
 
-    // --- Konstruktor z parametrami ---
     public Partner(String name, String logoUrl, String websiteUrl) {
         this.name = name;
         this.logoUrl = logoUrl;
         this.websiteUrl = websiteUrl;
     }
 
-    // --- Gettery i Settery ---
     public Long getId() {
         return id;
     }

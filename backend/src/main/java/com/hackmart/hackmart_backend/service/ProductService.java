@@ -39,8 +39,6 @@ public class ProductService {
         product.setPrice(price);
         product.setStock(stock);
 
-        System.out.println("📷 image: " + (imageFile == null ? "null" : "size=" + imageFile.getSize()));
-
         if (imageFile != null && !imageFile.isEmpty()) {
             String imageUrl = saveImage(imageFile);
             product.setImageUrl(imageUrl);
@@ -60,14 +58,12 @@ public class ProductService {
         product.setStock(stock);
 
         if (imageFile != null && !imageFile.isEmpty()) {
-            // 🧹 Usuń stare zdjęcie
             if (product.getImageUrl() != null) {
                 String oldFilename = product.getImageUrl().replace("/uploads/", "");
                 Path oldPath = Paths.get("uploads", oldFilename);
-                Files.deleteIfExists(oldPath); // 💥 bezpieczne usunięcie pliku, jeśli istnieje
+                Files.deleteIfExists(oldPath);
             }
 
-            // 💾 Zapisz nowe zdjęcie
             String imageUrl = saveImage(imageFile);
             product.setImageUrl(imageUrl);
 
@@ -80,10 +76,8 @@ public class ProductService {
 
 
     private String saveImage(MultipartFile imageFile) throws IOException {
-        System.out.println("📥 Nazwa pliku: " + imageFile.getOriginalFilename());
-        System.out.println("📏 Rozmiar: " + imageFile.getSize());
-        String filename = imageFile.getOriginalFilename(); // ❗️ bez UUID
-        Path filePath = Paths.get("uploads", filename);    // ❗️ podatne
+        String filename = imageFile.getOriginalFilename();
+        Path filePath = Paths.get("uploads", filename);
         Files.copy(imageFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
         return filename;
     }

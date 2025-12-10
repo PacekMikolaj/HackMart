@@ -1,6 +1,7 @@
 services:
   mysql:
     image: mysql:8
+    container_name: hackmart-mysql-dev
     environment:
       MYSQL_ROOT_PASSWORD: aw5sk83ee8
       MYSQL_DATABASE: hackmart
@@ -19,6 +20,7 @@ services:
 
   phpmyadmin:
     image: phpmyadmin:latest
+    container_name: hackmart-phpmyadmin-dev
     environment:
       PMA_HOST: mysql
       PMA_PORT: "3306"

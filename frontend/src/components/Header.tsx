@@ -23,8 +23,6 @@ const Header = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-  console.log(isAuthenticated, isAdmin, firstName);
-
   const cartItemsCount = cartItems.reduce(
     (total, item) => total + item.quantity,
     0

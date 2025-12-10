@@ -31,14 +31,11 @@ public class UserController {
             return ResponseEntity.status(401).build();
         }
 
-        System.out.println(token);
-
-        // 🔓 Rozkodowanie base64
         String decoded = new String(Base64.getDecoder().decode(token));
         String[] parts = decoded.split(":");
 
         if (parts.length < 3) {
-            return ResponseEntity.status(400).build(); // zły format
+            return ResponseEntity.status(400).build();
         }
 
         Long userId = Long.parseLong(parts[0]);
@@ -51,7 +48,6 @@ public class UserController {
         return ResponseEntity.ok(userService.mapToResponse(userOpt.get()));
     }
 
-
     @PutMapping("/{id}")
     public ResponseEntity<UserResponse> updateUser(
             @PathVariable Long id,
@@ -61,9 +57,6 @@ public class UserController {
         if (token == null || token.isBlank()) {
             return ResponseEntity.status(401).body(null);
         }
-
-        /// nie sprawdzamy jakie id jest w tokenie - IDOR
-
 
         return ResponseEntity.ok(userService.updateUser(id, request));
     }

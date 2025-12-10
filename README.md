@@ -127,9 +127,3 @@ This project was created for **educational and research** purposes as part of an
 You may freely use it for learning and local experimentation.
 
 ---
-
-If you want, mogę też dodać:
-- sekcję `Contributing`,
-- przykładowe zadania / misje dla studentów,
-- albo gotowy `Makefile` z aliasami `up`/`down`/`logs`.
-
