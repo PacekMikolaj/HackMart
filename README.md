@@ -81,12 +81,12 @@ docker compose logs -f
 
 ### 3. Access the application
 
-| Service | URL | Description |
-|----------|-----|-------------|
-| 🛍️ **Frontend (HackMart web app)** | [http://localhost:8081](http://localhost:8081) | Main user interface |
-| ⚙️ **Backend (API)** | [http://localhost:8081/api](http://localhost:8081/api) | Exposed via Nginx reverse proxy |
-| 🗄️ **phpMyAdmin** | [http://localhost:8080](http://localhost:8080) | MySQL management GUI |
-| 🐬 **MySQL** | `localhost:3306` | Database (user: `admin`, password: `admin`) |
+| Service                         | URL                         | Description          |
+| ------------------------------- | --------------------------- | -------------------- |
+| 🛍️ Frontend (HackMart web app) | http://localhost:3000       | Main user interface  |
+| ⚙️ Backend (API)               | http://localhost:7000/api   | Spring Boot REST API |
+| 🗄️ phpMyAdmin                  | http://localhost:8080       | MySQL management GUI |
+| 🐬 MySQL                        | localhost:3306              | user: admin / admin  |
 
 ---
 
