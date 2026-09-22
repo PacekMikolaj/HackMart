@@ -112,6 +112,25 @@ When you run `docker compose up --build`:
 
 ---
 
+## 🔓 Vulnerabilities Covered
+
+HackMart includes 10 intentional vulnerabilities, each with a guided challenge and progressive hints:
+
+| # | Vulnerability | Goal of the challenge |
+|---|---------------|-----------------------|
+| 1  | Mass Assignment | Register a user with admin rights by injecting an extra field (`isAdmin: true`) |
+| 2  | Broken Access Control – Token Forgery | Tamper with an unsigned/unencrypted auth token to gain admin access |
+| 3  | Weak Password Requirements | Reach the database via phpMyAdmin using weak/default credentials |
+| 4  | CORS Misconfiguration | Read API responses cross-origin due to a permissive CORS policy |
+| 5  | Missing Rate Limiting (CWE-770) | Mass-create accounts by flooding the register endpoint |
+| 6  | Cross-Site Scripting (XSS) | Trigger arbitrary JS via an unsanitized profile field |
+| 7  | Insecure Direct Object Reference (IDOR) | Edit another user's data by changing the ID in the request |
+| 8  | Improper Input Validation | Force negative stock by tampering with order quantities |
+| 9  | Path Traversal via File Upload | Escape the `uploads/` folder to drop an HTML/JS file in a public dir |
+| 10 | Server-Side Request Forgery (SSRF) | Read local server files via an unvalidated fetch endpoint |
+
+---
+
 ## 🛠 Troubleshooting (common issues)
 
 - **Port 3306 already in use**: Another local DB is probably running. Stop it or change the port mapping in `compose.yaml`.
